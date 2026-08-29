@@ -19,16 +19,31 @@ This trades multi-instance scalability for a much smaller trust surface:
 swap `app/core/session_store.py` for Redis and nothing else in the app
 needs to change if horizontal scaling is ever needed.
 
-## Setup
+## Getting started
+
+Clone the repo:
+
+```bash
+git clone https://github.com/CodedBankai/expenditure-analyzer.git
+cd expenditure-analyzer
+```
+
+Set up a virtual environment and install dependencies:
 
 ```bash
 python -m venv .venv
-source .venv/Scripts/activate   # Windows Git Bash; use .venv\Scripts\activate on cmd/PowerShell
+source .venv/Scripts/activate   # Windows Git Bash; use .venv\Scripts\activate on cmd/PowerShell, or source .venv/bin/activate on macOS/Linux
 pip install -r requirements.txt
+```
+
+Run the app:
+
+```bash
 uvicorn app.main:app --reload
 ```
 
-Then open http://127.0.0.1:8000.
+Then open http://127.0.0.1:8000 and upload one of the files in
+`sample_data/` to try it without a real statement.
 
 Run tests:
 
@@ -49,6 +64,28 @@ spend-by-month view. This was designed from a hand-drawn sketch:
 
 The light theme (white / cream / light green / light blue) was built from
 a separate reference image, not copied 1:1.
+
+### Screenshots
+
+**Home — upload**
+
+![Home page](docs/screenshots/home.png)
+
+**Spend tab** — uncategorized-transaction helper, category breakdown, spend over time
+
+![Spend tab](docs/screenshots/dashboard-spend.png)
+
+**Top Vendors tab** — by amount and by frequency
+
+![Top Vendors tab](docs/screenshots/dashboard-vendors.png)
+
+**Week Pattern tab** — day-of-week spend, drillable by month/week
+
+![Week Pattern tab](docs/screenshots/dashboard-pattern.png)
+
+**Recommendations tab** — credit vs debit, plain-language suggestions
+
+![Recommendations tab](docs/screenshots/dashboard-recommendations.png)
 
 ## How it works (pipeline)
 

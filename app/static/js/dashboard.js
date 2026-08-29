@@ -1,7 +1,15 @@
+// A session started on the upload page lives in sessionStorage; a
+// ?session_id=... query param is accepted as a fallback so a dashboard
+// URL can be shared/deep-linked directly.
+const queryParams = new URLSearchParams(window.location.search);
+const querySessionId = queryParams.get("session_id");
+if (querySessionId) sessionStorage.setItem("session_id", querySessionId);
 const sessionId = sessionStorage.getItem("session_id");
+
 const freqSelect = document.getElementById("freq-select");
 const clearBtn = document.getElementById("clear-data-btn");
 const tabButtons = document.querySelectorAll(".tab-btn");
+const VALID_TABS = ["spend", "vendors", "pattern", "recommendations"];
 
 let categoryChart, timeseriesChart, dowChart, monthlyChart, creditDebitChart;
 let selectedMonth = null; // 'YYYY-MM' or null (= all months)
@@ -15,19 +23,26 @@ if (!sessionId) {
   loadAnalysis();
 }
 
+function activateTab(tabName) {
+  const btn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+  if (!btn) return;
+  tabButtons.forEach((b) => b.classList.remove("active"));
+  btn.classList.add("active");
+  document.querySelectorAll(".tab-panel").forEach((p) => p.classList.add("hidden"));
+  document.getElementById(`tab-${tabName}`).classList.remove("hidden");
+  freqSelect.disabled = tabName !== "spend";
+  // Charts drawn while their tab was display:none get a zero-size canvas;
+  // resize on reveal so they actually paint.
+  [categoryChart, timeseriesChart, dowChart, monthlyChart, creditDebitChart].forEach((c) => c && c.resize());
+}
+
 tabButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    tabButtons.forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-    document.querySelectorAll(".tab-panel").forEach((p) => p.classList.add("hidden"));
-    document.getElementById(`tab-${btn.dataset.tab}`).classList.remove("hidden");
-    freqSelect.disabled = btn.dataset.tab !== "spend";
-    // Charts drawn while their tab was display:none get a zero-size canvas;
-    // resize on reveal so they actually paint.
-    [categoryChart, timeseriesChart, dowChart, monthlyChart, creditDebitChart].forEach((c) => c && c.resize());
-  });
+  btn.addEventListener("click", () => activateTab(btn.dataset.tab));
 });
 freqSelect.disabled = false; // spend tab is active by default
+
+const initialTab = window.location.hash.replace("#", "");
+if (VALID_TABS.includes(initialTab)) activateTab(initialTab);
 
 freqSelect.addEventListener("change", loadAnalysis);
 
