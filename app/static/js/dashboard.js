@@ -33,7 +33,17 @@ freqSelect.addEventListener("change", loadAnalysis);
 
 clearBtn.addEventListener("click", async () => {
   if (!confirm("This will permanently delete your uploaded data from the server. Continue?")) return;
-  await fetch(`/session/${sessionId}`, { method: "DELETE" });
+  clearBtn.disabled = true;
+  try {
+    const res = await fetch(`/session/${sessionId}`, { method: "DELETE" });
+    if (!res.ok && res.status !== 404) {
+      throw new Error(`Server responded with ${res.status}`);
+    }
+  } catch (err) {
+    alert("Couldn't reach the server to clear your data: " + err.message);
+    clearBtn.disabled = false;
+    return;
+  }
   sessionStorage.removeItem("session_id");
   window.location.href = "/";
 });
