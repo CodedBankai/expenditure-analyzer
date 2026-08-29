@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expenditure Analyzer</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Expenditure Analyzer</h1>
+    <p class="subtitle">Upload your bank / UPI statement to see where your money goes.</p>
+  </header>
+
+  <section class="privacy-banner">
+    <strong>Privacy by design:</strong> your file is processed in memory only, never written to disk,
+    and is deleted automatically when your session ends or you click "Clear my data now".
+    No login required.
+  </section>
+
+  <section class="upload-card">
+    <form id="upload-form">
+      <label for="file-input" class="file-drop">
+        <span id="file-label">Choose CSV or Excel file(s) (.csv, .xlsx, .xls) — up to 5MB total</span>
+        <input id="file-input" type="file" name="files" accept=".csv,.xlsx,.xls" multiple required>
+      </label>
+      <button type="submit" id="upload-btn">Analyze</button>
+    </form>
+    <div id="upload-status" class="status" role="status"></div>
+  </section>
+
+  <section id="mapping-card" class="upload-card hidden">
+    <h2>We couldn't confidently detect your columns</h2>
+    <p>Tell us which column is which for each file below.</p>
+    <div id="mapping-forms"></div>
+    <button id="submit-mapping-btn">Submit Mapping</button>
+  </section>
+</div>
+<script src="/static/js/upload.js"></script>
+</body>
+</html>

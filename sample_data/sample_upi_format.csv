@@ -1,0 +1,10 @@
+Date,Description,Amount,Type,Status
+2026-06-01,Ola Cabs,180.00,Debit,SUCCESS
+2026-06-02,Flipkart Order,2300.00,Debit,SUCCESS
+2026-06-03,Freelance Payment,8000.00,Credit,SUCCESS
+2026-06-04,Bookmyshow Movie Ticket,450.00,Debit,SUCCESS
+2026-06-06,Spotify Premium,119.00,Debit,SUCCESS
+2026-07-06,Spotify Premium,119.00,Debit,SUCCESS
+2026-08-06,Spotify Premium,119.00,Debit,SUCCESS
+2026-06-09,Dominos Pizza,899.00,Debit,SUCCESS
+2026-06-10,Reversed Order,300.00,Debit,REVERSED

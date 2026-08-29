@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Expenditure Analyzer</title>
+<link rel="stylesheet" href="/static/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <header class="dash-header">
+    <div>
+      <h1>Expenditure Analyzer</h1>
+      <p class="subtitle">Spending dashboard</p>
+    </div>
+    <div class="header-actions">
+      <select id="freq-select">
+        <option value="D">Daily</option>
+        <option value="W">Weekly</option>
+        <option value="M">Monthly</option>
+      </select>
+      <button id="clear-data-btn" class="danger">Clear my data now</button>
+    </div>
+  </header>
+
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="spend">Spend</button>
+    <button class="tab-btn" data-tab="vendors">Top Vendors</button>
+    <button class="tab-btn" data-tab="pattern">Week Pattern</button>
+    <button class="tab-btn" data-tab="recommendations">Recommendations</button>
+  </nav>
+
+  <section id="empty-state" class="hidden card">
+    <p>No transactions found in this range. Try uploading a different statement or widening the date range.</p>
+  </section>
+
+  <div id="dashboard-body">
+
+    <!-- SPEND TAB -->
+    <section id="tab-spend" class="tab-panel">
+      <section id="cleaning-summary" class="card"></section>
+
+      <div class="grid">
+        <section id="uncategorized-panel" class="card hidden">
+          <h2>Need help with a transaction</h2>
+          <div id="uncategorized-list"></div>
+        </section>
+        <section class="card">
+          <h2>Spend by Category</h2>
+          <canvas id="category-chart"></canvas>
+        </section>
+      </div>
+
+      <section class="card">
+        <h2>Spend Over Time</h2>
+        <canvas id="timeseries-chart"></canvas>
+      </section>
+
+      <section class="card">
+        <h2>Recurring Charges</h2>
+        <div id="recurring-list"></div>
+      </section>
+    </section>
+
+    <!-- TOP VENDORS TAB -->
+    <section id="tab-vendors" class="tab-panel hidden">
+      <section class="card">
+        <h2>Top Vendors</h2>
+        <div class="vendor-columns">
+          <div>
+            <h4>By amount</h4>
+            <div id="vendor-by-amount"></div>
+          </div>
+          <div>
+            <h4>By frequency</h4>
+            <div id="vendor-by-count"></div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- WEEK PATTERN TAB -->
+    <section id="tab-pattern" class="tab-panel hidden">
+      <section class="card">
+        <h2>Weekly Pattern</h2>
+        <div id="month-chips" class="chip-row hidden"></div>
+        <div id="week-chips" class="chip-row hidden"></div>
+        <p class="chip-label" id="pattern-filter-label"></p>
+        <canvas id="dow-chart"></canvas>
+      </section>
+
+      <section class="card">
+        <h2>Total Spend by Month</h2>
+        <canvas id="monthly-chart"></canvas>
+      </section>
+    </section>
+
+    <!-- RECOMMENDATIONS TAB -->
+    <section id="tab-recommendations" class="tab-panel hidden">
+      <section class="card">
+        <h2>Credit vs Debit</h2>
+        <canvas id="credit-debit-chart"></canvas>
+        <table class="cd-table">
+          <thead><tr><th></th><th>Total</th><th>Transactions</th></tr></thead>
+          <tbody id="credit-debit-table"></tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>Recommendations</h2>
+        <div id="recommendations-list"></div>
+      </section>
+    </section>
+
+  </div>
+</div>
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>

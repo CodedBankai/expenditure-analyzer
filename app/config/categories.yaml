@@ -1,0 +1,81 @@
+Food:
+  - swiggy
+  - zomato
+  - dominos
+  - pizza
+  - mcdonald
+  - kfc
+  - starbucks
+  - restaurant
+  - cafe
+  - eatsure
+  - box8
+
+Transport:
+  - uber
+  - ola
+  - rapido
+  - irctc
+  - indianoil
+  - petrol
+  - fuel
+  - metro
+  - redbus
+  - blusmart
+
+Shopping:
+  - amazon
+  - flipkart
+  - myntra
+  - ajio
+  - meesho
+  - nykaa
+  - reliance digital
+  - decathlon
+
+Bills/Utilities:
+  - electricity
+  - bses
+  - airtel
+  - jio
+  - vodafone
+  - broadband
+  - act fibernet
+  - water bill
+  - gas bill
+  - lpg
+
+Rent:
+  - rent
+  - nobroker
+  - housing.com
+  - landlord
+
+Entertainment:
+  - netflix
+  - hotstar
+  - bookmyshow
+  - spotify
+  - pvr
+  - inox
+  - primevideo
+
+Subscriptions:
+  - youtube premium
+  - apple.com/bill
+  - google play
+  - icloud
+  - linkedin premium
+  - notion
+
+Transfers:
+  - upi
+  - imps
+  - neft
+  - rtgs
+  - paytm
+  - phonepe
+  - gpay
+  - google pay
+
+Other: []
