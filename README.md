@@ -1,5 +1,7 @@
 # Expenditure Analyzer
 
+[Live demo](https://expenditure-analyzer-7hz9.onrender.com/)
+
 Upload a bank / UPI statement (CSV or Excel) and get a spending dashboard —
 category breakdown, trends over time, top vendors, recurring-charge
 detection, and plain-language recommendations. No login, no database,
