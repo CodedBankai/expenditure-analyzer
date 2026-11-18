@@ -5,14 +5,40 @@
 Upload a bank / UPI statement (CSV or Excel) and get a spending dashboard —
 category breakdown, trends over time, top vendors, recurring-charge
 detection, and plain-language recommendations. No login, no database,
-nothing written to disk.
+and no durable statement storage.
+
+## Optional AI category suggestions
+
+The dashboard can suggest categories for debit merchants that the local rules
+do not recognize. This feature uses the [Groq API](https://console.groq.com/docs/structured-outputs)
+only after the user checks the AI sharing box and clicks **Suggest categories
+with AI**. The server sends one bounded batch of distinct merchant descriptions,
+after replacing common UPI handles, numbers, links, and transaction references.
+Free-text names may still remain after redaction. The uploaded file, amounts,
+dates, and full transaction rows are not sent. Suggestions use the app's fixed
+category list or `unsure`; every suggestion must be reviewed and saved by the
+user. If Groq is unavailable, manual categorization continues to work.
+
+Set `GROQ_API_KEY` as a server-side environment variable to enable suggestions.
+`GROQ_MODEL` optionally overrides the default `openai/gpt-oss-20b` model and
+must support Groq strict structured outputs. Do not put the key in the browser
+or commit it to the repository. Groq's own [data controls](https://console.groq.com/docs/your-data)
+govern data processed by its API; this app does not opt users into model
+training or claim their corrections train a model automatically.
+
+A separate checkbox lets users keep redacted merchant/category pairs as
+evaluation examples **within the current in-memory session only**. They are
+not sent to Groq or stored durably, and they disappear when the session is
+cleared, expires, or the process restarts. A durable evaluation dataset would
+need a separately designed store and consent flow.
 
 ## Why zero-persistence
 
-Every uploaded file is parsed straight into memory, processed, and held only
-in a per-session in-memory store keyed by a random session ID in an
-httpOnly cookie. There is no database and no file ever touches the disk.
-Data is dropped when:
+Parsed transactions are held only in a per-session in-memory store keyed by a
+random session ID in an httpOnly cookie. There is no database or durable file
+storage. FastAPI's `UploadFile` may temporarily spool larger incoming files to
+disk while receiving them; the app does not keep that upload file after request
+processing. The parsed session data is dropped when:
 - the user clicks **Clear my data now**,
 - the session goes 30 minutes idle (background TTL sweep), or
 - the process restarts.

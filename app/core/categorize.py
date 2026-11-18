@@ -43,6 +43,10 @@ def categorize(
         return None
 
     out["category"] = out["description"].apply(match)
+    if "direction" in out.columns:
+        # Credits are excluded from spending and should not appear in the
+        # merchant-categorization queue (for example, salary deposits).
+        out.loc[out["direction"] != "debit", "category"] = None
     return out
 
 
@@ -53,4 +57,5 @@ def vendor_key(description: str) -> str:
 
 
 def uncategorized(df: pd.DataFrame) -> pd.DataFrame:
-    return df[df["category"].isna()]
+    rows = df[df["category"].isna()]
+    return rows[rows["direction"] == "debit"] if "direction" in rows.columns else rows

@@ -67,7 +67,7 @@ async def upload(response: Response, files: list[UploadFile]):
     session.cleaning_stats = stats
 
     response.set_cookie("session_id", session.session_id, httponly=True, max_age=1800, samesite="lax")
-    uncategorized_count = int(session.df["category"].isna().sum())
+    uncategorized_count = len(categorize.uncategorized(session.df))
     return {
         "session_id": session.session_id,
         "needs_mapping": False,
@@ -106,7 +106,7 @@ async def column_mapping(session_id: str, mapping_by_file: dict[str, dict[str, s
     session.needs_mapping = False
     session.raw_files.clear()
 
-    uncategorized_count = int(session.df["category"].isna().sum())
+    uncategorized_count = len(categorize.uncategorized(session.df))
     return {
         "session_id": session.session_id,
         "row_count": len(cleaned),

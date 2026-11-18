@@ -26,6 +26,7 @@ class SessionData:
     df: Optional[pd.DataFrame] = None
     cleaning_stats: dict[str, Any] = field(default_factory=dict)
     category_overrides: dict[str, str] = field(default_factory=dict)
+    evaluation_examples: list[dict[str, str]] = field(default_factory=list)
     custom_categories: list[str] = field(default_factory=list)
     detected_columns: Optional[list[str]] = None
     needs_mapping: bool = False

@@ -8,6 +8,10 @@ const sessionId = sessionStorage.getItem("session_id");
 
 const freqSelect = document.getElementById("freq-select");
 const clearBtn = document.getElementById("clear-data-btn");
+const aiConsent = document.getElementById("ai-consent");
+const aiSuggestBtn = document.getElementById("ai-suggest-btn");
+const aiSuggestStatus = document.getElementById("ai-suggest-status");
+const evaluationConsent = document.getElementById("evaluation-consent");
 const tabButtons = document.querySelectorAll(".tab-btn");
 const VALID_TABS = ["spend", "vendors", "pattern", "recommendations"];
 
@@ -63,6 +67,52 @@ clearBtn.addEventListener("click", async () => {
   window.location.href = "/";
 });
 
+aiConsent.addEventListener("change", () => {
+  aiSuggestBtn.disabled = !aiConsent.checked;
+  if (!aiConsent.checked) aiSuggestStatus.textContent = "";
+});
+
+aiSuggestBtn.addEventListener("click", async () => {
+  if (!aiConsent.checked || !sessionId) return;
+  aiSuggestBtn.disabled = true;
+  aiSuggestStatus.className = "status";
+  aiSuggestStatus.textContent = "Requesting suggestions...";
+  try {
+    const res = await fetch(`/session/${sessionId}/ai-suggestions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ share_redacted_descriptions: true }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "AI suggestions are unavailable.");
+    const selects = Array.from(document.querySelectorAll("#uncategorized-list select"));
+    let suggested = 0;
+    data.suggestions.forEach(({ vendor, category }) => {
+      const select = selects.find((item) => item.dataset.vendor === vendor);
+      if (!select) return;
+      const row = select.parentElement;
+      const oldNote = row.querySelector(".suggestion-note");
+      if (oldNote) oldNote.remove();
+      const note = document.createElement("span");
+      note.className = "suggestion-note";
+      if (category === "unsure") {
+        note.textContent = "AI unsure — choose manually";
+      } else if (Array.from(select.options).some((option) => option.value === category)) {
+        select.value = category;
+        note.textContent = "AI suggestion — review before saving";
+        suggested += 1;
+      }
+      row.appendChild(note);
+    });
+    aiSuggestStatus.textContent = `${suggested} suggestions filled in. Review them, then click Save. ${data.remaining_count || 0} descriptions were beyond this batch.`;
+  } catch (err) {
+    aiSuggestStatus.className = "status error";
+    aiSuggestStatus.textContent = `${err.message} You can still categorize manually.`;
+  } finally {
+    aiSuggestBtn.disabled = !aiConsent.checked;
+  }
+});
+
 async function loadUncategorized() {
   const res = await fetch(`/session/${sessionId}/uncategorized`);
   if (!res.ok) return;
@@ -107,11 +157,17 @@ async function loadUncategorized() {
     list.querySelectorAll("select").forEach((s) => {
       if (s.value) mappings[s.dataset.vendor] = s.value;
     });
-    await fetch(`/session/${sessionId}/categorize`, {
+    const res = await fetch(`/session/${sessionId}/categorize`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ mappings, new_categories: [] }),
+      body: JSON.stringify({ mappings, new_categories: [], keep_evaluation_examples: evaluationConsent.checked }),
     });
+    if (!res.ok) {
+      aiSuggestStatus.className = "status error";
+      aiSuggestStatus.textContent = "Could not save categories. Please try again.";
+      return;
+    }
+    aiSuggestStatus.textContent = "";
     loadUncategorized();
     loadAnalysis();
   });

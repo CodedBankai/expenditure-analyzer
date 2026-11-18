@@ -69,13 +69,9 @@ Subscriptions:
   - notion
 
 Transfers:
-  - upi
-  - imps
-  - neft
-  - rtgs
-  - paytm
-  - phonepe
-  - gpay
-  - google pay
+  - transfer to self
+  - self transfer
+  - funds transfer
+  - wallet transfer
 
 Other: []

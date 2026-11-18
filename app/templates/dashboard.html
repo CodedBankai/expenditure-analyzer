@@ -44,6 +44,15 @@
       <div class="grid">
         <section id="uncategorized-panel" class="card hidden">
           <h2>Need help with a transaction</h2>
+          <p>Review each merchant below and choose a category. Credits, such as salary deposits, are not included.</p>
+          <div class="ai-consent">
+            <label><input id="ai-consent" type="checkbox"> Send unclear merchant descriptions to Groq for category suggestions</label>
+            <p class="privacy-note">Only distinct debit descriptions are sent, with common account, UPI, phone, and reference identifiers redacted. Free text may still contain a person's name. Groq is an external service. Nothing is sent unless you choose this option and click the button. Suggestions are never saved automatically.</p>
+            <button id="ai-suggest-btn" type="button" disabled>Suggest categories with AI</button>
+            <p id="ai-suggest-status" class="status" role="status"></p>
+          </div>
+          <label class="evaluation-consent"><input id="evaluation-consent" type="checkbox"> Keep redacted merchant names and my approved categories as evaluation examples in this session</label>
+          <p class="privacy-note">This separate choice does not send examples to Groq or save them to disk. They disappear when this session is cleared, expires, or the server restarts. Without this choice, your corrections still work for this session.</p>
           <div id="uncategorized-list"></div>
         </section>
         <section class="card">

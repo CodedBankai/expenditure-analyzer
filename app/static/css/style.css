@@ -167,6 +167,13 @@ select {
   padding: 6px 0;
 }
 
+.ai-consent { background: var(--card-bg-alt); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 14px; }
+.ai-consent label { display: block; }
+.privacy-note { color: var(--muted); font-size: 0.85rem; line-height: 1.4; }
+.suggestion-note { color: var(--muted); font-size: 0.82rem; }
+.vendor-cat-row { flex-wrap: wrap; }
+.evaluation-consent { display: block; margin-top: 14px; }
+
 /* Chips for month/week selection */
 .chip-row {
   display: flex;
